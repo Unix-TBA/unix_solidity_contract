@@ -4,11 +4,22 @@ pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract MyToken is ERC721, ERC721URIStorage {
-    constructor() ERC721("MyToken", "MTK") {}
+contract Token is ERC721, ERC721URIStorage {
+    constructor(string memory tokenName, string memory tokenSymbol, address owner,uint256 tokenId,string memory uri)
+        ERC721(tokenName, tokenSymbol)
+    {
+        safeMint(owner, tokenId, uri);
 
-    // The following functions are overrides required by Solidity.
+    }
+
+    function safeMint(address to, uint256 tokenId, string memory uri)
+        private
+    {
+        _safeMint(to, tokenId);
+        _setTokenURI(tokenId, uri);
+    }
 
     function tokenURI(uint256 tokenId)
         public
